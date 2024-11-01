@@ -79,3 +79,32 @@ print("nb clusters =",kres,", nb feuilles = ", leaves, " runtime = ", round((tps
 
 
 #######################################################################
+
+
+n_clusters = range(2,7)
+inertie_values=[]
+runtime_values=[]
+for k in n_clusters:
+   tps1 = time.time()
+   model = cluster.AgglomerativeClustering(linkage='average', n_clusters=k)
+   tps2 = time.time()
+   model = model.fit_predict(datanp)
+   inertie = metrics.davies_bouldin_score(datanp,model)
+   runtime = tps2-tps1
+   inertie_values.append(inertie)
+   runtime_values.append(runtime)
+
+
+fig, ax1 = plt.subplots()
+ax1.set_xlabel("Nombre de clusters")
+ax1.set_ylabel("Inertie", color='blue')
+ax1.plot(n_clusters, inertie_values, color = 'blue')
+ax1.tick_params(axis='y')
+
+
+ax2 =ax1.twinx()
+ax2.set_ylabel('Runtime', color='red')
+ax2.plot(n_clusters, runtime_values, color = 'red')
+ax2.tick_params(axis='y')
+
+plt.show()
